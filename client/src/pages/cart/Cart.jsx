@@ -13,11 +13,22 @@ const Cart = () => {
 
   useEffect(() => {
     if (cartData?.data?.length) {
-      const initialQuantities = {};
-      cartData.data.forEach((item) => {
-        initialQuantities[item._id] = 1;
+      setQuantities((prev) => {
+        const updated = { ...prev };
+        cartData.data.forEach((item) => {
+          if (!(item._id in updated)) {
+            updated[item._id] = 1;
+          }
+        });
+        Object.keys(updated).forEach((id) => {
+          if (!cartData.data.find((item) => item._id === id)) {
+            delete updated[id];
+          }
+        });
+        return updated;
       });
-      setQuantities(initialQuantities);
+    } else {
+      setQuantities({});
     }
   }, [cartData?.data]);
 
@@ -92,7 +103,6 @@ const Cart = () => {
         </div>
       )}
 
-      {/* Total Bar */}
       <div className="fixed bottom-0 left-0 w-full flex justify-center z-30">
         <div className="max-w-3xl w-full bg-white border-t border-gray-200 shadow-lg px-6 py-4 flex items-center justify-between">
           <span className="text-lg font-semibold text-gray-700">

@@ -13,14 +13,12 @@ const Sidebar = () => {
   const handleCloseSidebar = () => {
     dispatch(closeSidebar());
   };
-  // Height of navbar is assumed to be 64px (h-16). Adjust if your navbar height is different.
   return (
     <div
       className={`fixed top-16 right-0 h-[calc(100vh-4rem)] w-64 bg-gray-900 text-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out
             ${isSidebarOpen ? "translate-x-0" : "translate-x-full"}
         `}
     >
-      {/* Close Button */}
       <button
         className="absolute top-4 right-4 p-2 rounded hover:bg-gray-800 focus:outline-none"
         onClick={handleCloseSidebar}

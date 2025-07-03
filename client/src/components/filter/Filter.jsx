@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import useProducts from "../../customHooks/useProducts"; // Adjust path if needed
+import useProducts from "../../customHooks/useProducts";
 import { useDispatch } from "react-redux";
 import { getCategory } from "../../features/filterSlice";
 
