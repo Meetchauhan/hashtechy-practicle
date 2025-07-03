@@ -10,6 +10,8 @@ const ProductItem = ({
   isInCart,
   _id,
 }) => {
+  
+
   return (
     <div className="bg-white shadow-2xl rounded-2xl overflow-hidden w-full h-full flex flex-col max-w-sm mx-auto transition-transform hover:scale-105 min-h-[480px]">
       <Link

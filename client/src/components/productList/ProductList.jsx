@@ -6,13 +6,14 @@ import useProducts from "../../customHooks/useProducts";
 import { addToCart, removeFromCart } from "../../features/cartSlice";
 import useCartProduct from "../../customHooks/useCartProduct";
 import Filter from "../filter/Filter";
+import Loader from "../loader/Loader";
 
 const ProductList = () => {
   const dispatch = useDispatch();
   const product = useProducts();
   const cartData = useCartProduct();
   const getCategory = useSelector((state) => state?.filter?.category);
-
+  const loading = product?.pending;
   useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
@@ -41,23 +42,27 @@ const ProductList = () => {
         All Products
       </h1>
       <Filter />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {filteredProducts?.map((item) => (
-          <div key={item?._id} className="flex flex-col h-full">
-            <ProductItem
-              _id={item?._id}
-              title={item?.title}
-              image={item?.image}
-              description={item?.description}
-              price={item?.price}
-              quantity={item?.quantity}
-              isInCart={isInCart(item._id)}
-              addTocart={() => handleAddToCart(item)}
-              removeFromCart={() => handleRemoveFromCart(item._id)}
-            />
-          </div>
-        ))}
-      </div>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {filteredProducts?.map((item) => (
+            <div key={item?._id} className="flex flex-col h-full">
+              <ProductItem
+                _id={item?._id}
+                title={item?.title}
+                image={item?.image}
+                description={item?.description}
+                price={item?.price}
+                quantity={item?.quantity}
+                isInCart={isInCart(item._id)}
+                addTocart={() => handleAddToCart(item)}
+                removeFromCart={() => handleRemoveFromCart(item._id)}
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
