@@ -5,9 +5,11 @@ import { useLocation } from "react-router-dom";
 
 const Layout = ({ children }) => {
   const { pathname } = useLocation();
+  // Hide Navbar on /login and 404 (not found) page
+  const hideNavbar = pathname === "/login" || pathname === "/not-found";
   return (
     <>
-      {pathname !== "/login" && <Navbar />}
+      {!hideNavbar && <Navbar />}
       <Sidebar />
       <main>{children}</main>
     </>

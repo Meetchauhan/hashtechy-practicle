@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
 import useUser from "../../customHooks/useUser";
-import Logout from "../logout/Logout";
 import { useDispatch } from "react-redux";
 import { openSidebar } from "../../features/sidebarSlice";
-import useSidebar from "../../customHooks/useSidebar";
 
 const Navbar = () => {
   const dispatch = useDispatch();

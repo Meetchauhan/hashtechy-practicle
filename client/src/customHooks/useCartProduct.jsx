@@ -1,7 +1,8 @@
 import { useSelector } from "react-redux";
 
 const useCartProduct = () => {
-  const products = useSelector((state) => state?.cart);
-  return products;
+  const cart = useSelector((state) => state?.cart);
+
+  return cart;
 };
 export default useCartProduct;

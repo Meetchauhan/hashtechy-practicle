@@ -1,67 +1,25 @@
 import { useDispatch } from "react-redux";
 import useCartProduct from "../../customHooks/useCartProduct";
-import { removeFromCart } from "../../features/cartSlice";
+import { getCart } from "../../features/cartSlice";
 import CartItem from "../../components/cartItem/CartItem";
 import { Link } from "react-router-dom";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useEffect } from "react";
 
 const Cart = () => {
   const dispatch = useDispatch();
   const cartData = useCartProduct();
 
-  const [quantities, setQuantities] = useState({});
+  const totalAmount = useMemo(() => {
+    if (!cartData?.data?.items?.length) return 0;
 
-  useEffect(() => {
-    if (cartData?.data?.length) {
-      setQuantities((prev) => {
-        const updated = { ...prev };
-        cartData.data.forEach((item) => {
-          if (!(item._id in updated)) {
-            updated[item._id] = 1;
-          }
-        });
-        Object.keys(updated).forEach((id) => {
-          if (!cartData.data.find((item) => item._id === id)) {
-            delete updated[id];
-          }
-        });
-        return updated;
-      });
-    } else {
-      setQuantities({});
-    }
+    return cartData?.data?.items?.reduce((acc, item) => {
+      return acc + item.price * item.quantity;
+    }, 0);
   }, [cartData?.data]);
 
-  const handleRemoveFromCart = (_id) => {
-    dispatch(removeFromCart({ _id }));
-    setQuantities((prev) => {
-      const copy = { ...prev };
-      delete copy[_id];
-      return copy;
-    });
-  };
-
-  const handleIncrement = (_id, maxQuantity) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [_id]: Math.min((prev[_id] || 1) + 1, maxQuantity),
-    }));
-  };
-
-  const handleDecrement = (_id) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [_id]: Math.max((prev[_id] || 1) - 1, 1),
-    }));
-  };
-
-  const totalAmount = useMemo(() => {
-    if (!cartData?.data?.length) return 0;
-    return cartData.data.reduce((sum, item) => {
-      const quantity = quantities[item._id] || 1;
-      return sum + (item.price || 0) * quantity;
-    }, 0);
-  }, [cartData?.data, quantities]);
+  useEffect(() => {
+    dispatch(getCart());
+  }, []);
 
   return (
     <div className="relative min-h-[80vh] max-w-3xl mx-auto px-4 py-8 pb-32">
@@ -69,20 +27,18 @@ const Cart = () => {
         Your Cart
       </h1>
 
-      {cartData?.data?.length > 0 ? (
+      {cartData?.data?.items?.length > 0 ? (
         <div className="flex flex-col gap-6">
-          {cartData.data.map((item) => (
+          {cartData?.data?.items?.map((item) => (
             <CartItem
               key={item._id}
+              _id={item.productId}
               title={item.title}
               image={item.image}
               description={item.description}
               price={item.price}
-              totalQuantity={item.quantity}
-              quantity={quantities[item._id] || 1}
-              removeFromCart={() => handleRemoveFromCart(item._id)}
-              handleIncrement={() => handleIncrement(item._id, item.quantity)}
-              handleDecrement={() => handleDecrement(item._id)}
+              quantity={item.quantity}
+              maxQuantity={item.maxQuantity}
             />
           ))}
         </div>

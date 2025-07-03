@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.config.js";
 import productRouter from "./routes/product.routes.js";
 import userLoginRouter from "./routes/userLogin.routes.js";
+import cartRouter from "./routes/cart.routes.js"
 import cors from "cors";
 
 dotenv.config();
@@ -22,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", productRouter);
 app.use("/api", userLoginRouter);
+app.use("/api", cartRouter)
 
 app.listen(PORT, () => {
   connectDB();

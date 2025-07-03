@@ -1,17 +1,15 @@
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { addToCart, getCart } from "../../features/cartSlice";
 
-const ProductItem = ({
-  title,
-  image,
-  price,
-  description,
-  addTocart,
-  removeFromCart,
-  isInCart,
-  _id,
-}) => {
-  
+const ProductItem = ({ title, image, price, description, _id }) => {
+  const dispatch = useDispatch();
 
+  const handleAddToCart = () => {
+    dispatch(addToCart({ productId: _id, quantity: 1 })).then(() =>
+      dispatch(getCart())
+    );
+  };
   return (
     <div className="bg-white shadow-2xl rounded-2xl overflow-hidden w-full h-full flex flex-col max-w-sm mx-auto transition-transform hover:scale-105 min-h-[480px]">
       <Link
@@ -36,23 +34,13 @@ const ProductItem = ({
             &#8377;{price}
           </span>
         </div>
-        <div className="mt-4">
-          {isInCart ? (
-            <button
-              onClick={removeFromCart}
-              className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
-            >
-              Remove from Cart
-            </button>
-          ) : (
-            <button
-              onClick={addTocart}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
-            >
-              Add to Cart
-            </button>
-          )}
-        </div>
+
+        <button
+          onClick={handleAddToCart}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+        >
+          Add to Cart
+        </button>
       </div>
     </div>
   );

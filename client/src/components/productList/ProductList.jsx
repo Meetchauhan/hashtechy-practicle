@@ -3,32 +3,17 @@ import ProductItem from "../productItem/productItem";
 import { useEffect, useMemo } from "react";
 import { getProducts } from "../../features/productSlice";
 import useProducts from "../../customHooks/useProducts";
-import { addToCart, removeFromCart } from "../../features/cartSlice";
-import useCartProduct from "../../customHooks/useCartProduct";
 import Filter from "../filter/Filter";
 import Loader from "../loader/Loader";
 
 const ProductList = () => {
   const dispatch = useDispatch();
   const product = useProducts();
-  const cartData = useCartProduct();
   const getCategory = useSelector((state) => state?.filter?.category);
   const loading = product?.pending;
   useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
-
-  const handleAddToCart = (data) => {
-    dispatch(addToCart(data));
-  };
-
-  const handleRemoveFromCart = (_id) => {
-    dispatch(removeFromCart({ _id }));
-  };
-
-  const isInCart = (id) => {
-    return cartData?.data?.some((item) => item._id === id);
-  };
 
   const filteredProducts = useMemo(() => {
     if (!product) return [];
@@ -55,9 +40,6 @@ const ProductList = () => {
                 description={item?.description}
                 price={item?.price}
                 quantity={item?.quantity}
-                isInCart={isInCart(item._id)}
-                addTocart={() => handleAddToCart(item)}
-                removeFromCart={() => handleRemoveFromCart(item._id)}
               />
             </div>
           ))}

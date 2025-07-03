@@ -4,15 +4,20 @@ import { useDispatch } from "react-redux";
 import { closeSidebar } from "../../features/sidebarSlice";
 import Logout from "../logout/Logout";
 import useCartProduct from "../../customHooks/useCartProduct";
+import { useEffect } from "react";
+import { getCart } from "../../features/cartSlice";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
   const isSidebarOpen = useSidebar();
   const cartData = useCartProduct();
-  const cartLength = cartData?.data?.length;
+  const cartLength = cartData?.data?.items?.length;
   const handleCloseSidebar = () => {
     dispatch(closeSidebar());
   };
+  useEffect(() => {
+    dispatch(getCart());
+  }, []);
   return (
     <div
       className={`fixed top-16 right-0 h-[calc(100vh-4rem)] w-64 bg-gray-900 text-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out
